@@ -34,6 +34,7 @@ public class Questao1 {
    * vértice.
    * 
    * O grafo foi implementado através de uma lista de adjacências.
+   * O método não possui tratamentos para elementos nulos ou índices fora do range
    * 
    * @param centrais lista de centrais
    * @param pares    lista com pares de centrais que trocam encomendas entre si
