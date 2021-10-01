@@ -89,3 +89,24 @@ menorRota(Localidades,Arcos,FunçãoDeDistância,Início,Fim,FunçãoDePedágio,
   reverse(Caminho)
 
 B) o algoritmo de Dijkstra é um algoritmo guloso que, através de repetidas escolhas da aresta de menor custo até então. Após a execução, ele retornará o menor custo do vértice de origem até todos os vértices alcançáveis no grafo. Depois disso, basta selecionar o caminho de menor custo entre a nossa origem e nosso destino
+
+
+3) 
+
+
+4)
+
+A) Teríamos uma solução polinomial para todos os problemas do tipo NP-completo.
+
+B) sabe-se que a classe de problemas NP-difíceis são difíceis de se resolver e que, até o momento, não se encontrou solução para ela.
+Logo, se existe uma transformação polinomial de um problema para NP-dificíl, então esse problema entra na classe de NP-difícil  e será difícil de resolver.
+
+c) a verificação consiste em você confirmar se uma resposta é válida ou não. Enquanto a resolução consiste em descobrir realmente a solução ao problema.
+Por exemplo, dado um grafo G e uma sequência de arestas A e um custo C, é possível verificar facilmente se essa sequência percorre todas as arestas com o custo C. 
+Basta verificar se a sequência não tem ciclos, percorre todos os vértices e a soma dos custos é igual a C.
+
+Porém, não ainda não foi descoberto uma forma de dado um grafo G', saber se a sequência A' tem o menor custo possível, em tempo polinomial.
+
+D) Algoritmos aproximados são algoritmos que não resolvem perfeitamente o problema, mas conseguem uma boa aproximação. Isso é muito utilizado em problemas de otimização onde não se sabe como se chegar na melhor solução ou a melhor solução não é praticável. O algoritmo 46 do material de apoio mostra um exemplo de uma aproximação com solução em tempo polinomial para o problema do caixeiro viajante.
+
+Heurísticas são metodos específicos para problemas de otimização e exploram algum conhecimento específico do problema em questão mas sem garantia de solução ótima.
