@@ -57,6 +57,7 @@ Deseja-se desenvolver um algoritmo que receba um grafo G, uma func¸ao˜ p, um v
 
 A) 
 A solução consiste em criar um grafo G'=(V,A,c) com p : A → R+ representando o custo da viagem, sendo esse custo dado pela fórmula
+
 ```
 distância entre as cidades/autonomia*preço do combustível + pedágio para entrar na cidade
 ```
@@ -65,18 +66,18 @@ Após isso, será necessário implementar Dijkstra e pegar a menor rota entre o 
 
 Considere a estrutura auxiliar Antecessor_v que indica o ancenstral do vértice V. Custo_v o custo em passos entre o vértice V e o vértice de origem. Caminho a lista com o caminho entre origem e destino (no exercício é chamado de p). Observado_v para indicar se o vértice V já foi observado ou não durante a execução do algoritmo. Visitas a fila de elementos que serão sendo visitados.
 
-menorRota(V,A,w,Início,Fim,p, preço, autonomia)
-  c <- ConstruirFuncaoDeCusto(V,A,w,p,preço,autonomia)
-  Custo_v ← ∞ ∀v ∈ V
-  Antecessor_v ← null ∀v ∈ V
-  Observado_v ← false ∀v ∈ V
+menorRota(Localidades,Arcos,FunçãoDeDistância,Início,Fim,FunçãoDePedágio, preçoDoCombustivel, autonomiaDoVeículo)
+  funçãoDeCusto <- ConstruirFuncaoDeCusto(FunçãoDeDistância,FunçãoDePedágio,preçoDaGasolina,autonomiaDoVeículo)
+  Custo_v ← ∞ ∀v ∈ Localidades
+  Antecessor_v ← null ∀v ∈ Localidades
+  Observado_v ← false ∀v ∈ Localidades
   Custo_Início ← 0
-  while ∃v ∈ V (Observado_v = false) do
+  while ∃v ∈ Localidades com Observado_v = false do
     vérticeDeMenorCusto ← pegarVérticeAdjacenteAosVérticesAdicionadosComMenorCustoQueNãoFoiVisitado()
     Observado_v ← true
     foreach v ∈ N(vérticeDeMenorCusto) :Observado_v = false do
-      if Custo_v > Custo_u +c(u, v) then
-        Custo_v ← Custo_u +c(u, v)
+      if Custo_v > Custo_u + funçãoDeCusto(u, v) then
+        Custo_v ← Custo_u + funçãoDeCusto(u, v)
         Antecessor_v ← u
   
   vértice = Fim
