@@ -40,12 +40,14 @@ public class Questao2 {
    * O grafo foi implementado através de uma lista de adjacências. O método não
    * possui tratamentos para elementos nulos ou índices fora do range.
    * 
-   * @param localidades lista de localidades
-   * @param arcos       lista com caminhos entre as localdiades
-   * @param inicio      vértice de origem
-   * @param fim         vértice de destino
-   * @param funcaoDeDistancia uma função que recebe duas localidades e retorna a distância entre elas
-   * @param funcaoDePedagio uma função que recebe uma localidade e retorna o custo para se passar por ela
+   * @param localidades        lista de localidades
+   * @param arcos              lista com caminhos entre as localdiades
+   * @param inicio             vértice de origem
+   * @param fim                vértice de destino
+   * @param funcaoDeDistancia  uma função que recebe duas localidades e retorna a
+   *                           distância entre elas
+   * @param funcaoDePedagio    uma função que recebe uma localidade e retorna o
+   *                           custo para se passar por ela
    * @param precoDoCombustivel o valor do combustível
    * @param autonomiaDoVeiculo a autonomia do veículo
    * @return uma lista ordenada com as localidades para fazer o menor caminho
@@ -55,26 +57,15 @@ public class Questao2 {
       Function<Integer, Double> funcaoDePedagio, Double precoDoCombustivel, Double autonomiaDoVeiculo) {
 
     funcaoDeCusto = construirFuncaoDeCusto(funcaoDeDistancia, funcaoDePedagio, precoDoCombustivel, autonomiaDoVeiculo);
-    this.localidades = localidades;
-    this.arcos = arcos;
-    this.precoDoCombustivel = precoDoCombustivel;
-    this.autonomiaDoVeiculo = autonomiaDoVeiculo;
-    this.inicio = inicio;
-    this.fim = fim;
-    custo = new ArrayList<>();
-    antecessor = new ArrayList<>();
-    observado = new ArrayList<>();
+    incializarAsVariaveis(localidades, arcos, inicio, fim, precoDoCombustivel, autonomiaDoVeiculo);
 
-    adjacencias = arcos.stream().collect(Collectors.groupingBy(Tuple2::getItem1));
+    aplicarDijkstra();
 
-    for (int i = 0; i < localidades.size(); i++) {
-      custo.add(Double.MAX_VALUE);
-      antecessor.add(null);
-      observado.add(false);
-    }
+    return construirListaDeRetorno();
+  }
 
+  private void aplicarDijkstra() {
     custo.set(inicio, 0D);
-
     while (existeLocalidadeQueNaoFoiObservada(observado)) {
       Integer verticeDeMenorCusto = pegarVerticeAdjacenteAosVerticesAdicionadosComMenorCustoQueNaoFoiVisitado();
       observado.set(verticeDeMenorCusto, true);
@@ -97,8 +88,10 @@ public class Questao2 {
       }
 
     }
-    Integer vertice = fim;
+  }
 
+  private List<Integer> construirListaDeRetorno() {
+    Integer vertice = fim;
     List<Integer> caminho = new ArrayList<>();
 
     do {
@@ -108,6 +101,29 @@ public class Questao2 {
 
     Collections.reverse(caminho);
     return caminho;
+  }
+
+  private void incializarAsVariaveis(List<Integer> localidades, List<Tuple2<Integer, Integer>> arcos, Integer inicio,
+      Integer fim, Double precoDoCombustivel, Double autonomiaDoVeiculo) {
+
+    this.localidades = localidades;
+    this.arcos = arcos;
+    this.precoDoCombustivel = precoDoCombustivel;
+    this.autonomiaDoVeiculo = autonomiaDoVeiculo;
+    this.inicio = inicio;
+    this.fim = fim;
+    custo = new ArrayList<>();
+    antecessor = new ArrayList<>();
+    observado = new ArrayList<>();
+
+    adjacencias = arcos.stream().collect(Collectors.groupingBy(Tuple2::getItem1));
+
+    for (int i = 0; i < localidades.size(); i++) {
+      custo.add(Double.MAX_VALUE);
+      antecessor.add(null);
+      observado.add(false);
+    }
+
   }
 
   private Integer pegarVerticeAdjacenteAosVerticesAdicionadosComMenorCustoQueNaoFoiVisitado() {

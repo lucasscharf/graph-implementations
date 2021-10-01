@@ -1,6 +1,7 @@
 # Implementações para a lista 2
 
 Os exercícios estão dentro do diretório src/main/java/br/cp/ufsc com o nome QuestaoX.java onde X ∈ {1,2,3}.
+Para compilar o código, basta executar o comando mvn clean install -DskipTests
 Um exemplo de cada um desses exercícios sendo executados pode ser verficado usando o comando mvn test -Dtest=QuestaoXTest, onde X ∈ {1,2,3}. Ps, é necessário ter o Java versão 8 ou superior e o maven para poder executá-los com esses comandos.
 
 A descrição de cada método, incluindo o que faz e o que foi assumido, está nos comentários do mesmo. Esse projeto foi feito com fins acadêmicos, por isso, priorizou-se a facilidade de entendimento sobre a utilização de estruturas de dados mais eficientes ou escrita de código mais modularizada.
@@ -45,7 +46,7 @@ encontrarCaminho(Centrais, Pares, Início, Fim)
   while vértice != null
 
   reverse(Caminho)
-  return Caminho
+  retorna Caminho
 
 ```
 
@@ -66,6 +67,7 @@ Após isso, será necessário implementar Dijkstra e pegar a menor rota entre o 
 
 Considere a estrutura auxiliar Antecessor_v que indica o ancenstral do vértice V. Custo_v o custo em passos entre o vértice V e o vértice de origem. Caminho a lista com o caminho entre origem e destino (no exercício é chamado de p). Observado_v para indicar se o vértice V já foi observado ou não durante a execução do algoritmo. Visitas a fila de elementos que serão sendo visitados.
 
+```
 menorRota(Localidades,Arcos,FunçãoDeDistância,Início,Fim,FunçãoDePedágio, preçoDoCombustivel, autonomiaDoVeículo)
   funçãoDeCusto <- ConstruirFuncaoDeCusto(FunçãoDeDistância,FunçãoDePedágio,preçoDaGasolina,autonomiaDoVeículo)
   Custo_v ← ∞ ∀v ∈ Localidades
@@ -87,12 +89,76 @@ menorRota(Localidades,Arcos,FunçãoDeDistância,Início,Fim,FunçãoDePedágio,
   while vértice != null
 
   reverse(Caminho)
+```
 
 B) o algoritmo de Dijkstra é um algoritmo guloso que, através de repetidas escolhas da aresta de menor custo até então. Após a execução, ele retornará o menor custo do vértice de origem até todos os vértices alcançáveis no grafo. Depois disso, basta selecionar o caminho de menor custo entre a nossa origem e nosso destino
 
 
-3) 
+3) Conforme o conversado com o professor, não será tratado o problema de descobrir quais são os itens presentes na solução ótima.
 
+A) A solução para esse problema consiste numa PD que verifique a combinação de todos os itens em todos os caminhões.
+Considere a tupla p = (c1, c2, ..., cn) que contém a capacidade de carga residual de um determinado caminhão;
+Considere a operação p.sub(i,b) que subtrai a carga b do i-ésimo caminhão;
+Considere a operação p(i) que retorna a carga do i-ésimo caminhão.
+
+Nossa função OPT(n,p) fica da seguinte forma:
+
+```
+OPT(n,t,p) = 0, se t = 0       #terminou a recursão
+OPT(n,t,p) = 0, se p(t) = 0    #terminou a recursão
+OPT(n,t,p) = 0, se n = 0       #terminou a recursão
+OPT(n,t,p) = OPT(n-1,t,p)
+OPT(n,t,p) = max(
+              OPT(n-1,t,p.sub(t, g(n))) + v(n),
+              OPT(n-1,t-1,p.sub(t-1, g(n))) + v(n),
+              OPT(n-1,t-2,p.sub(t-2, g(n))) + v(n),
+              ...
+              OPT(n-1,1,p.sub(1, g(n))) + v(n)
+          )
+```
+
+Dessa forma, o algoritmo fica:
+
+```
+  maiorLucro(Caminhões, CapacidadesDeCarga, Itens, funçãoDePeso, funçãoDeLucro) 
+    lucroPotencial ← 0
+    para cada Item em Itens
+      lucroPotencial ← lucroPotencial + funçãoDeLucro(Item)
+    lucroRealizado = OPT_PD(Itens, Caminhões, CapacidadesDeCarga, funçãoDePeso, funçãoDeLucro)
+
+    retorna lucroPotencial - lucroRealizado;
+  
+  OPT_PD(Caminhões, CapacidadesDeCarga, Itens, funçãoDePeso, funçãoDeLucro)
+    Matriz[][][] = IniciaUmaMatrizMultidimencional com tamanho dado por Quantidade de Itens x Quantidade Caminhões x Capacidade de Carga do Caminhão
+    for(i = 0; i < Itens; i++) {
+      for(j = 0; Caminhões.size(); j++) {
+        Matriz[0][j][CapacidadesDeCarga.get(j)] = 0;
+      }
+    } 
+
+    for(i = 1; i < Itens; i++) {
+      for(j = 0; j < Caminhões; j++) {
+        for (k = 0; k < CapacidadesDeCarga.get(j); j++) {
+          
+          if(k < funçãoDePeso(i)) {
+            Matriz[i][j][k] = Matriz[i-1][j][k] 
+            continue;
+          } 
+
+          solução = Matriz[i-1][j][k]
+          for(l = 0; l < Caminhões; l++) {
+            if(solução < funçãoDeLucro(i) + Matriz[i][l][k - funçãoDePeso(i)]) {
+              solução = funçãoDeLucro(i) + Matriz[i][l][k - funçãoDePeso(i)];
+            }
+          }
+          Matriz[i][j][k] = solução
+        }
+      }
+    }
+```
+
+B) O algoritmo é uma PD que verifica qual é o lucro máximo existente para a empresa se ele for inserido em cada um dos caminhões possíveis. 
+Dessa forma, se nós temos o lucro máximo das entregas e sabemos o lucro máximo possível (soma do lucro de todos os produtos), com uma simples subtração, conseguimos descobrir o lucro perdido.
 
 4)
 
